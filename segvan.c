@@ -1,3 +1,20 @@
+// FxTC constants
+//mainnet
+#define _PUBKEY_PREFIX	"\x5f"
+#define _SCRIPT_PREFIX	"\x24"
+#define _SECRET_PREFIX	207
+#define _BECH32_HRP	"bc"
+//testnet
+//#define _PUBKEY_PREFIX	"\x80"
+//#define _SCRIPT_PREFIX	"\x41"
+//#define _SECRET_PREFIX	214
+//#define _BECH32_HRP	"tb"
+//regtest
+//#define _PUBKEY_PREFIX	"\x58"
+//#define _SCRIPT_PREFIX	"\x1c"
+//#define _SECRET_PREFIX	221
+//#define _BECH32_HRP	"bcrt"
+
 /**
  * By nullius <nullius@nym.zone>
  *
@@ -89,19 +106,9 @@
  * https://github.com/spesmilo/electrum/blob/2774126db6c258807d95921936eb13af07047d97/RELEASE-NOTES
  */
 
-//mainnet
-#define	WIF_P2PKH	207
-#define	WIF_P2WPKH	207
-#define	WIF_P2WPKH_P2SH	207
-//testnet
-//#define	WIF_P2PKH	214
-//#define	WIF_P2WPKH	214
-//#define	WIF_P2WPKH_P2SH	214
-//regtest
-//#define	WIF_P2PKH	221
-//#define	WIF_P2WPKH	221
-//#define	WIF_P2WPKH_P2SH	221
-//
+#define	WIF_P2PKH	_SECRET_PREFIX
+#define	WIF_P2WPKH	_SECRET_PREFIX
+#define	WIF_P2WPKH_P2SH	_SECRET_PREFIX
 #define	WIF_P2SH	0x85
 #define	WIF_P2WSH	0x86
 #define	WIF_P2WSH_P2SH	0x87
@@ -341,12 +348,7 @@ oldstyle(char *addr, size_t *addrsz, char *wif, size_t *wifsz,
 {
 	int error;
 
-        //mainnet
-	error = b58chk_enc(addr, addrsz, "\x5f", 1, h160, 20);
-        //testnet
-	//error = b58chk_enc(addr, addrsz, "\x80", 1, h160, 20);
-        //regtest
-	//error = b58chk_enc(addr, addrsz, "\x58", 1, h160, 20);
+	error = b58chk_enc(addr, addrsz, _PUBKEY_PREFIX, 1, h160, 20);
 	if (error)
 		return (error);
 
@@ -367,12 +369,7 @@ segwit_nested(char *addr, size_t *addrsz, char *wif, size_t *wifsz,
 
 	hash160(buf, buf, 22);
 
-        //mainnet
-	error = b58chk_enc(addr, addrsz, "\x24", 1, buf, 20);
-        //testnet
-	//error = b58chk_enc(addr, addrsz, "\x41", 1, buf, 20);
-        //regtest
-	//error = b58chk_enc(addr, addrsz, "\x1c", 1, buf, 20);
+	error = b58chk_enc(addr, addrsz, _SCRIPT_PREFIX, 1, buf, 20);
 	if (error) {
 		zeroize(buf, sizeof(buf));
 		return (error);
@@ -391,7 +388,7 @@ segwit_bech32(char *addr, size_t *addrsz, char *wif, size_t *wifsz,
 	int error;
 
 	/* WARNING: Inverted error. */
-	error = segwit_addr_encode(addr, "bc", 0, h160, 20);
+	error = segwit_addr_encode(addr, _BECH32_HRP, 0, h160, 20);
 	if (error != 1) {
 		fprintf(stderr, "segwit_addr() returned %d\n", error);
 		return (-99);

@@ -89,9 +89,19 @@
  * https://github.com/spesmilo/electrum/blob/2774126db6c258807d95921936eb13af07047d97/RELEASE-NOTES
  */
 
-#define	WIF_P2PKH	0x80
-#define	WIF_P2WPKH	0x81
-#define	WIF_P2WPKH_P2SH	0x82
+//mainnet
+#define	WIF_P2PKH	207
+#define	WIF_P2WPKH	207
+#define	WIF_P2WPKH_P2SH	207
+//testnet
+//#define	WIF_P2PKH	214
+//#define	WIF_P2WPKH	214
+//#define	WIF_P2WPKH_P2SH	214
+//regtest
+//#define	WIF_P2PKH	221
+//#define	WIF_P2WPKH	221
+//#define	WIF_P2WPKH_P2SH	221
+//
 #define	WIF_P2SH	0x85
 #define	WIF_P2WSH	0x86
 #define	WIF_P2WSH_P2SH	0x87
@@ -331,7 +341,12 @@ oldstyle(char *addr, size_t *addrsz, char *wif, size_t *wifsz,
 {
 	int error;
 
-	error = b58chk_enc(addr, addrsz, "", 1, h160, 20);
+        //mainnet
+	error = b58chk_enc(addr, addrsz, "\x5f", 1, h160, 20);
+        //testnet
+	//error = b58chk_enc(addr, addrsz, "\x80", 1, h160, 20);
+        //regtest
+	//error = b58chk_enc(addr, addrsz, "\x58", 1, h160, 20);
 	if (error)
 		return (error);
 
@@ -352,7 +367,12 @@ segwit_nested(char *addr, size_t *addrsz, char *wif, size_t *wifsz,
 
 	hash160(buf, buf, 22);
 
-	error = b58chk_enc(addr, addrsz, "\x05", 1, buf, 20);
+        //mainnet
+	error = b58chk_enc(addr, addrsz, "\x24", 1, buf, 20);
+        //testnet
+	//error = b58chk_enc(addr, addrsz, "\x41", 1, buf, 20);
+        //regtest
+	//error = b58chk_enc(addr, addrsz, "\x1c", 1, buf, 20);
 	if (error) {
 		zeroize(buf, sizeof(buf));
 		return (error);
@@ -736,7 +756,7 @@ main(int argc, char *argv[])
 		exit(64);
 	}
 
-	selftest();
+	//selftest();
 
 	if (T_flag) {
 #ifdef compile_broken_stuff

@@ -1,7 +1,7 @@
 PROG=segvan
 CFLAGS+=-O2 -std=c11
 LDFLAGS+=-L./secp256k1/.libs
-LDADD=-lsecp256k1 -lcrypto
+LDADD=-lsecp256k1 -lcrypto -lgmp
 
 all: segvan
 

@@ -38,7 +38,7 @@ secp256k1/.libs/libsecp256k1.a: secdir
 	fi
 	test -f $@
 
-LDADD=-lcrypto -lsecp256k1
+LDADD=-lcrypto -lsecp256k1 -lgmp
 LDFLAGS=-L$(.OBJDIR)/secp256k1/.libs
 
 .include <bsd.prog.mk>
